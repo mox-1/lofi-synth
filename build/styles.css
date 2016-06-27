@@ -1,0 +1,133 @@
+.knob {
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    background-size: cover;
+    background-image: url("images/to_rotate.png");
+}
+
+.knob-lighting {
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    background-size: cover;
+    background-image: url("images/static.png");
+}
+
+.shadow {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    background-size: cover;
+    background-image: url("images/knob_just_tick.png");
+}
+
+.faderSlit {
+    width: 3px;
+    height: 100%;
+    position: relative;
+    left: 8px;
+    background-color: #737373;
+    border: 2px solid #000;
+}
+
+.faderSlit.wide {
+    left: calc(50% - 4px);
+}
+
+.synth-panel {
+    position: relative;
+    margin: 0px auto;
+    width: 960px;
+}
+
+.main-panel {
+    position: absolute;
+    width: 960px;
+    height: 300px;
+    top: 0;
+}
+
+.asdr {
+    position: absolute;
+    top: 21px;
+    left: 145px;
+}
+
+.header {
+    width: 960px;
+    height: 100px;
+    background-color: #a4a3a2;
+    margin: 0px auto;
+    border-bottom: 4px solid #d8d8d8;
+}
+
+.discrete-dial-wrapper {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: #2e2f31;
+    left: 25px;
+    top: 25px;
+}
+
+.osc-type {
+    background-size: contain;
+    height: 23px;
+    width: 23px;
+    position: absolute;
+}
+
+.triangle {
+    background-image: url('images/triangle.png');
+    right: 0px;
+    top: 0px;
+}
+
+.square {
+    background-image: url('images/square.png');
+    left: 0px;
+    top: 0px;
+}
+
+.sine {
+    background-image: url('images/sine.png');
+    left: 0px;
+    bottom: 0px;
+}
+
+.saw {
+    background-image: url('images/saw.png');
+    right: 0px;
+    bottom: 0px;
+}
+
+.patch-selector {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+
+.screen {
+    width: 453px;
+    height: 69px;
+    margin: 20px;
+    background-color: #eaeaea;
+    margin: 0px auto;
+    position: relative;
+    top: 13px;
+    border: 6px solid #603737;
+    border-style: double;
+    text-align: center;
+    padding-top: 8px;
+    font-size: 50px;
+    box-sizing: border-box;
+    font-family: 'digital';
+    color: #666;
+}
+
+@font-face {
+  font-family: 'digital';
+  src: url('./fonts/digital-7/digital-7.ttf');
+}
