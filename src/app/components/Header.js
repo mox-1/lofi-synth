@@ -10,6 +10,8 @@ class Header extends Component {
                     <div onClick={this.props.decrementActivePatch}>-</div>
                 </div>
                 <div className={'screen'}>{this.props.title}</div>
+                <div onClick={this.props.newPatch}>NEW</div>
+                <div onClick={this.props.savePatch}>SAVE</div>
             </div>
         );
     }
@@ -18,7 +20,9 @@ class Header extends Component {
 Header.propTypes = {
     title: PropTypes.string.isRequired,
     incrementActivePatch: PropTypes.func.isRequired,
-    decrementActivePatch: PropTypes.func.isRequired
+    decrementActivePatch: PropTypes.func.isRequired,
+    newPatch: PropTypes.func.isRequired,
+    savePatch: PropTypes.func.isRequired
 };
 
 export default Header;

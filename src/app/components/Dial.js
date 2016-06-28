@@ -25,8 +25,6 @@ class Dial extends React.Component {
 }
 
 Dial.propTypes = {
-    top: PropTypes.number.isRequired,
-    left: PropTypes.number.isRequired,
     currentValue: PropTypes.number.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     extraStyles: PropTypes.object

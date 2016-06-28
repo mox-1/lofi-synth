@@ -30,8 +30,6 @@ class Fader extends React.Component {
 }
 
 Fader.propTypes = {
-    top: PropTypes.number.isRequired,
-    left: PropTypes.number.isRequired,
     currentValue: PropTypes.number.isRequired,
     handleMouseDown: PropTypes.func.isRequired
 };

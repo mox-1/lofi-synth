@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import {Surface, Group, Shape, Path} from 'react-art';
 import ReactDOM from 'react-dom';
 import Control from './Control';
 import Discrete from './Discrete';
@@ -55,23 +54,34 @@ class SynthPanel extends React.Component {
         });
     }
 
+    _savePatch = () => {
+        let {osc, attack, sustain, delay, release, frequency, resonance} = this.state;
+        this.props.savePatch({
+            title: this.state.title,
+            params: {
+                osc,
+                attack,
+                sustain,
+                delay,
+                release,
+                frequency,
+                resonance
+            }
+        });
+    }
+
     componentWillMount() {
         document.addEventListener('mouseup', this._clearMouseMoveListeners);
     }
 
     render() {
-        console.log(this.state.delay);
         const width = 960;
         const height = 400;
-        var BORDER_PATH = Path().moveTo(0, 0).line(0, height).line(width, 0).line(0, -1 * height).close();
 
         return (
             <div>
-                <Header title={this.state.title} incrementActivePatch={this.props.incrementActivePatch} decrementActivePatch={this.props.decrementActivePatch}/>
+                <Header title={this.state.title} incrementActivePatch={this.props.incrementActivePatch} decrementActivePatch={this.props.decrementActivePatch} newPatch={this.props.newPatch} savePatch={this._savePatch}/>
                 <div className={'synth-panel'}>
-                    <Surface top={50} left={50} width={960} height={243}>
-                        <Shape fill="#2e2f31" d={BORDER_PATH} />
-                    </Surface>
                     <div className={'main-panel'}>
                         <DialDiscreteControl top={37} left={5} registerMouseMoveListener={this._registerMouseMoveListener} acuity={2} currentValue={this.oscKeyToCentValue[this.state.osc]} />
                         <div className={'asdr'}>
@@ -94,7 +104,9 @@ class SynthPanel extends React.Component {
 SynthPanel.propTypes = {
     activePatch: PropTypes.object.isRequired,
     incrementActivePatch: PropTypes.func.isRequired,
-    decrementActivePatch: PropTypes.func.isRequired
+    decrementActivePatch: PropTypes.func.isRequired,
+    newPatch: PropTypes.func.isRequired,
+    savePatch: PropTypes.func.isRequired
 };
 
 export default SynthPanel;
