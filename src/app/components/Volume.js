@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import {controlConstants} from '../constants/all';
 
 class Volume extends React.Component {
 
@@ -10,7 +11,7 @@ class Volume extends React.Component {
             height: 17,
             width: 80,
             position: 'absolute',
-            bottom: 1.29 * this.props.currentValue
+            bottom: controlConstants.VOLUME_FADER_SCALE * this.props.currentValue
         };
         let faderWrapperStyle = {
             position: 'absolute',

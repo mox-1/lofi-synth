@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
+import {controlConstants} from '../constants/all';
 
 const Discrete = (WrappedComponent) =>
     class extends Component {
@@ -7,7 +8,7 @@ const Discrete = (WrappedComponent) =>
             currentValue: PropTypes.number.isRequired
         }
         _discretise = (num) => {
-            let steps = 3;
+            let steps = controlConstants.NUM_OF_OSC_TYPES - 1;
             let stepValue = 100 / steps;
             var value = 0;
             for (var i = 0; i < steps; i++) {

@@ -7,6 +7,7 @@ import Dial from './Dial';
 import FilterPanel from './FilterPanel';
 import Volume from './Volume';
 import Header from './Header';
+import Keyboard from './Keyboard';
 
 var DialControl = Control(Dial);
 var DialDiscreteControl = Control(Discrete(Dial));
@@ -75,9 +76,6 @@ class SynthPanel extends React.Component {
     }
 
     render() {
-        const width = 960;
-        const height = 400;
-
         return (
             <div>
                 <Header title={this.state.title} incrementActivePatch={this.props.incrementActivePatch} decrementActivePatch={this.props.decrementActivePatch} newPatch={this.props.newPatch} savePatch={this._savePatch}/>
@@ -92,10 +90,11 @@ class SynthPanel extends React.Component {
                         </div>
                         <FilterPanel frequency={this.state.frequency} resonance={this.state.resonance}/>
                         <DialControl top={24} left={670} registerMouseMoveListener={this._registerMouseMoveListener} changeHandler={this._handleParamChange.bind(null, 'frequency')} acuity={5}  currentValue={this.state.frequency}/>
-                        <DialControl top={110} left={670} registerMouseMoveListener={this._registerMouseMoveListener} changeHandler={this._handleParamChange.bind(null, 'resonance')} position={-130} acuity={5}  currentValue={this.state.resonance}/>
+                        <DialControl top={110} left={670} registerMouseMoveListener={this._registerMouseMoveListener} changeHandler={this._handleParamChange.bind(null, 'resonance')} acuity={5}  currentValue={this.state.resonance}/>
                         <VolumeControl top={24} left={840} registerMouseMoveListener={this._registerMouseMoveListener} currentValue={60}/>
                     </div>
                 </div>
+                <Keyboard/>
             </div>
         );
     }

@@ -6,6 +6,8 @@ import {bindActionCreators} from 'redux';
 import SynthPanel from '../components/SynthPanel';
 import * as PatchActions from '../actions/PatchActions';
 
+import {userPrompts} from '../constants/all';
+
 // dont give this component a state. let all data come from redux
 
 class Synth extends Component {
@@ -43,20 +45,26 @@ class Synth extends Component {
     _savePatch = (data) => {
         // redux action to update active id of redux state with params
         // send data to backend
+        let showSuccessMessage = () => {
+            window.alert(userPrompts.SUCCESS);
+        };
         if (this.state.tempPatch) {
             Promise.resolve(this.props.patchActions.addNewPatch(data)).then(() => {
                 this.setState({
                     tempPatch: false,
                     activePatch: this.state.patches.length - 1
-                });
+                }, showSuccessMessage);
             });
         } else {
-            this.props.patchActions.editPatch(data, this.state.activePatch);
+            let x = window.confirm(userPrompts.CONFIRM);
+            if (x) {
+                Promise.resolve(this.props.patchActions.editPatch(data, this.state.activePatch)).then(showSuccessMessage);
+            }
         }
     }
 
     _newPatch = () => {
-        Promise.resolve(window.prompt('Enter a name for your patch')).then((title) => {
+        Promise.resolve(window.prompt(userPrompts.PROMPT)).then((title) => {
             this.setState({
                 tempPatch: {
                     title: title,
@@ -79,10 +87,6 @@ class Synth extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             patches: nextProps.patches
-        });
-        var myFirebaseRef = new Firebase("https://low-fi-synth.firebaseio.com/");
-        myFirebaseRef.child("yo").on("value", function(snapshot) {
-            console.log(snapshot.val());  // Alerts "San Francisco"
         });
     }
 

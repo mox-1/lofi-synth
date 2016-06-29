@@ -1,4 +1,4 @@
-import ActionTypes from '../constants/ActionTypes';
+import {ActionTypes} from '../constants/all';
 
 const initialState = [];
 
@@ -42,7 +42,6 @@ export default function patchReducer(state = initialState, action) {
         case ActionTypes.ADD_NEW_PATCH:
             var newState = state.slice();
             newState.push(action.payload);
-            console.log(newState);
             return newState;
         default:
             return state;

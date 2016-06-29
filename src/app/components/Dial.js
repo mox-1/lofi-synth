@@ -1,10 +1,12 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import {controlConstants} from '../constants/all';
 
 class Dial extends React.Component {
 
     render() {
-        let deg =  - 130 + 2.6 * this.props.currentValue;
+        const {DIAL_MINIMUM, DIAL_SCALE_PARAM} = controlConstants;
+        let deg =  DIAL_MINIMUM + DIAL_SCALE_PARAM * this.props.currentValue;
         let {top, left, transition}  = (this.props.extraStyles || {});
         let styles = {
             transform: 'rotate(' + deg + 'deg)',

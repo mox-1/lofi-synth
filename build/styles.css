@@ -39,6 +39,7 @@
     position: relative;
     margin: 0px auto;
     width: 960px;
+    height: 300px;
 }
 
 .main-panel {
@@ -106,6 +107,34 @@
     position: absolute;
     width: 50px;
     height: 50px;
+}
+
+.keyboard {
+    width: 960px;
+    margin: 0px auto;
+    position: relative;
+}
+
+.whiteNote {
+    width: 64px;
+    height: 300px;
+    display: inline-block;
+    border: 1px solid black;
+    box-shadow: 2px 10px 5px #888888;
+    border-radius: 0px 4px 7px;
+    box-sizing: border-box;
+}
+
+.blackNote {
+    background-color: black;
+    height: 250px;
+    vertical-align: top;
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 250px;
+    box-shadow: 2px 10px 5px #888888;
+    border-radius: 0px 4px 7px;
 }
 
 

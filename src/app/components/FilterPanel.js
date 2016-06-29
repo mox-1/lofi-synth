@@ -1,34 +1,45 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import {filterPanelConstants} from '../constants/all';
 
 class FilterPanel extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            height: 150
-        };
-    }
 
     _paintCurve = (ctx, res) => {
-        let y = this.state.height/2;
-        let resonanceStart = (res + 130)/2;
+        const {
+            HEIGHT,
+            BEZIER_CONTROL_X_ONE,
+            BEZIER_CONTROL_X_TWO,
+            BEZIER_END_X,
+            BEZIER_END_Y,
+            RESONANCE_OFFSET,
+            RESONANCE_SCALE
+        } = filterPanelConstants;
+        let y = HEIGHT / 2;
+        let resonanceStart = (res + RESONANCE_OFFSET) / RESONANCE_SCALE;
         ctx.beginPath();
         ctx.moveTo(0,y);
-        ctx.bezierCurveTo(250, y, 300, y - resonanceStart, 300, 200);
+        ctx.bezierCurveTo(
+            BEZIER_CONTROL_X_ONE,
+            y,
+            BEZIER_CONTROL_X_TWO,
+            y - resonanceStart,
+            BEZIER_END_X,
+            BEZIER_END_Y
+        );
         ctx.stroke();
     }
 
     componentWillReceiveProps(nextProps) {
         var context = ReactDOM.findDOMNode(this).getContext('2d');
         context.clearRect(0, 0, 600, 300);
-        context.translate((nextProps.frequency - this.props.frequency) * 2.5, 0);
+        context.translate((nextProps.frequency - this.props.frequency) * filterPanelConstants.FREQUENCY_SCALE, 0);
         this._paintCurve(context, nextProps.resonance);
     }
 
     componentDidMount() {
         var context = ReactDOM.findDOMNode(this).getContext('2d');
-        context.translate(-250 + this.props.frequency * 2.5, 0);
-        context.strokeStyle = "#FF0000";
+        context.translate(filterPanelConstants.FREQUENCY_OFFSET + this.props.frequency * filterPanelConstants.FREQUENCY_SCALE, 0);
+        context.strokeStyle = '#FF0000';
         this._paintCurve(context, this.props.resonance);
     }
 
@@ -44,7 +55,7 @@ class FilterPanel extends React.Component {
         };
 
         return (
-            <canvas style={surfaceStyle} width={300} height={this.state.height}></canvas>
+            <canvas style={surfaceStyle} width={filterPanelConstants.WIDTH} height={filterPanelConstants.HEIGHT}></canvas>
         );
     }
 }

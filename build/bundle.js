@@ -22085,11 +22085,7 @@
 	});
 	exports.default = patchReducer;
 
-	var _ActionTypes = __webpack_require__(194);
-
-	var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _all = __webpack_require__(194);
 
 	var initialState = [];
 
@@ -22098,7 +22094,7 @@
 	    var action = arguments[1];
 
 	    switch (action.type) {
-	        case _ActionTypes2.default.LOAD_PATCHES:
+	        case _all.ActionTypes.LOAD_PATCHES:
 	            return [{
 	                title: 'Classic Piano',
 	                params: {
@@ -22122,7 +22118,7 @@
 	                    resonance: 3
 	                }
 	            }];
-	        case _ActionTypes2.default.EDIT_PATCH:
+	        case _all.ActionTypes.EDIT_PATCH:
 	            return state.map(function (patch, i) {
 	                if (i === action.payload.index) {
 	                    return action.payload.data;
@@ -22130,10 +22126,9 @@
 	                    return patch;
 	                }
 	            });
-	        case _ActionTypes2.default.ADD_NEW_PATCH:
+	        case _all.ActionTypes.ADD_NEW_PATCH:
 	            var newState = state.slice();
 	            newState.push(action.payload);
-	            console.log(newState);
 	            return newState;
 	        default:
 	            return state;
@@ -22149,11 +22144,116 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = {
+	var ActionTypes = exports.ActionTypes = {
 	    LOAD_PATCHES: 'LOAD_PATCHES',
 	    ADD_NEW_PATCH: 'ADD_NEW_PATCH',
 	    EDIT_PATCH: 'EDIT_PATCH'
 	};
+
+	var controlConstants = exports.controlConstants = {
+	    DIAL_MINIMUM: -130,
+	    DIAL_SCALE_PARAM: 2.6,
+	    NUM_OF_OSC_TYPES: 4,
+	    VOLUME_FADER_SCALE: 1.29
+	};
+
+	var filterPanelConstants = exports.filterPanelConstants = {
+	    HEIGHT: 150,
+	    WIDTH: 300,
+	    BEZIER_CONTROL_X_ONE: 250,
+	    BEZIER_CONTROL_X_TWO: 300,
+	    BEZIER_END_X: 300,
+	    BEZIER_END_Y: 200,
+	    RESONANCE_OFFSET: 130,
+	    RESONANCE_SCALE: 2,
+	    FREQUENCY_OFFSET: -250,
+	    FREQUENCY_SCALE: 2.5
+	};
+
+	var userPrompts = exports.userPrompts = {
+	    SUCCESS: 'Patch saved :)',
+	    CONFIRM: 'Overwrite patch?',
+	    PROMPT: 'Enter a name for your patch'
+	};
+
+	var Notes = exports.Notes = [{
+	    freq: 146.8,
+	    cMaj: true
+	}, {
+	    freq: 155.6,
+	    cMaj: false
+	}, {
+	    freq: 164.8,
+	    cMaj: true
+	}, {
+	    freq: 174.6,
+	    cMaj: true
+	}, {
+	    freq: 185,
+	    cMaj: false
+	}, {
+	    freq: 196.0,
+	    cMaj: true
+	}, {
+	    freq: 207.7,
+	    cMaj: false
+	}, {
+	    freq: 220.0,
+	    cMaj: true
+	}, {
+	    freq: 233.1,
+	    cMaj: false
+	}, {
+	    freq: 246.9,
+	    cMaj: true
+	}, {
+	    freq: 261.6,
+	    cMaj: true
+	}, {
+	    freq: 277.2,
+	    cMaj: false
+	}, {
+	    freq: 293.7,
+	    cMaj: true
+	}, {
+	    freq: 311.1,
+	    cMaj: false
+	}, {
+	    freq: 329.6,
+	    cMaj: true
+	}, {
+	    freq: 349.2,
+	    cMaj: true
+	}, {
+	    freq: 370.0,
+	    cMaj: false
+	}, {
+	    freq: 392.0,
+	    cMaj: true
+	}, {
+	    freq: 415.3,
+	    cMaj: false
+	}, {
+	    freq: 440.0,
+	    cMaj: true
+	}, {
+	    freq: 466.2,
+	    cMaj: false
+	}, {
+	    freq: 493.9,
+	    cMaj: true
+	}, {
+	    freq: 523.3,
+	    cMaj: true
+	}, {
+	    freq: 554.4,
+	    cMaj: false
+	}, {
+	    freq: 587.3,
+	    cMaj: true
+	}];
+
+	var keyMap = exports.keyMap = [65, 81, 90, 83, 87, 88, 69, 68, 82, 67, 70, 84, 86, 89, 71, 66, 85, 72, 73, 78, 79, 74, 77, 80, 75];
 
 /***/ },
 /* 195 */
@@ -35008,9 +35108,11 @@
 
 	var _SynthPanel2 = _interopRequireDefault(_SynthPanel);
 
-	var _PatchActions = __webpack_require__(541);
+	var _PatchActions = __webpack_require__(543);
 
 	var PatchActions = _interopRequireWildcard(_PatchActions);
+
+	var _all = __webpack_require__(194);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -35051,20 +35153,26 @@
 	        _this._savePatch = function (data) {
 	            // redux action to update active id of redux state with params
 	            // send data to backend
+	            var showSuccessMessage = function showSuccessMessage() {
+	                window.alert(_all.userPrompts.SUCCESS);
+	            };
 	            if (_this.state.tempPatch) {
 	                Promise.resolve(_this.props.patchActions.addNewPatch(data)).then(function () {
 	                    _this.setState({
 	                        tempPatch: false,
 	                        activePatch: _this.state.patches.length - 1
-	                    });
+	                    }, showSuccessMessage);
 	                });
 	            } else {
-	                _this.props.patchActions.editPatch(data, _this.state.activePatch);
+	                var x = window.confirm(_all.userPrompts.CONFIRM);
+	                if (x) {
+	                    Promise.resolve(_this.props.patchActions.editPatch(data, _this.state.activePatch)).then(showSuccessMessage);
+	                }
 	            }
 	        };
 
 	        _this._newPatch = function () {
-	            Promise.resolve(window.prompt('Enter a name for your patch')).then(function (title) {
+	            Promise.resolve(window.prompt(_all.userPrompts.PROMPT)).then(function (title) {
 	                _this.setState({
 	                    tempPatch: {
 	                        title: title,
@@ -35099,10 +35207,6 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({
 	                patches: nextProps.patches
-	            });
-	            var myFirebaseRef = new Firebase("https://low-fi-synth.firebaseio.com/");
-	            myFirebaseRef.child("yo").on("value", function (snapshot) {
-	                console.log(snapshot.val()); // Alerts "San Francisco"
 	            });
 	        }
 	    }, {
@@ -35210,6 +35314,10 @@
 
 	var _Header2 = _interopRequireDefault(_Header);
 
+	var _Keyboard = __webpack_require__(541);
+
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -35299,9 +35407,6 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var width = 960;
-	            var height = 400;
-
 	            return _react2.default.createElement(
 	                'div',
 	                {
@@ -35336,12 +35441,15 @@
 	                        }),
 	                        _react2.default.createElement(DialControl, { top: 24, left: 670, registerMouseMoveListener: this._registerMouseMoveListener, changeHandler: this._handleParamChange.bind(null, 'frequency'), acuity: 5, currentValue: this.state.frequency, __self: this
 	                        }),
-	                        _react2.default.createElement(DialControl, { top: 110, left: 670, registerMouseMoveListener: this._registerMouseMoveListener, changeHandler: this._handleParamChange.bind(null, 'resonance'), position: -130, acuity: 5, currentValue: this.state.resonance, __self: this
+	                        _react2.default.createElement(DialControl, { top: 110, left: 670, registerMouseMoveListener: this._registerMouseMoveListener, changeHandler: this._handleParamChange.bind(null, 'resonance'), acuity: 5, currentValue: this.state.resonance, __self: this
 	                        }),
 	                        _react2.default.createElement(VolumeControl, { top: 24, left: 840, registerMouseMoveListener: this._registerMouseMoveListener, currentValue: 60, __self: this
 	                        })
 	                    )
-	                )
+	                ),
+	                _react2.default.createElement(_Keyboard2.default, {
+	                    __self: this
+	                })
 	            );
 	        }
 	    }]);
@@ -35497,6 +35605,8 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _all = __webpack_require__(194);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35523,7 +35633,7 @@
 	            }
 
 	            return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(_class)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this._discretise = function (num) {
-	                var steps = 3;
+	                var steps = _all.controlConstants.NUM_OF_OSC_TYPES - 1;
 	                var stepValue = 100 / steps;
 	                var value = 0;
 	                for (var i = 0; i < steps; i++) {
@@ -35668,6 +35778,8 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _all = __webpack_require__(194);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35688,7 +35800,10 @@
 	    _createClass(Dial, [{
 	        key: 'render',
 	        value: function render() {
-	            var deg = -130 + 2.6 * this.props.currentValue;
+	            var DIAL_MINIMUM = _all.controlConstants.DIAL_MINIMUM;
+	            var DIAL_SCALE_PARAM = _all.controlConstants.DIAL_SCALE_PARAM;
+
+	            var deg = DIAL_MINIMUM + DIAL_SCALE_PARAM * this.props.currentValue;
 
 	            var _ref = this.props.extraStyles || {};
 
@@ -35748,6 +35863,8 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _all = __webpack_require__(194);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35759,24 +35876,33 @@
 	var FilterPanel = function (_React$Component) {
 	    _inherits(FilterPanel, _React$Component);
 
-	    function FilterPanel(props) {
+	    function FilterPanel() {
+	        var _Object$getPrototypeO;
+
+	        var _temp, _this, _ret;
+
 	        _classCallCheck(this, FilterPanel);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FilterPanel).call(this, props));
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
 
-	        _this._paintCurve = function (ctx, res) {
-	            var y = _this.state.height / 2;
-	            var resonanceStart = (res + 130) / 2;
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(FilterPanel)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this._paintCurve = function (ctx, res) {
+	            var HEIGHT = _all.filterPanelConstants.HEIGHT;
+	            var BEZIER_CONTROL_X_ONE = _all.filterPanelConstants.BEZIER_CONTROL_X_ONE;
+	            var BEZIER_CONTROL_X_TWO = _all.filterPanelConstants.BEZIER_CONTROL_X_TWO;
+	            var BEZIER_END_X = _all.filterPanelConstants.BEZIER_END_X;
+	            var BEZIER_END_Y = _all.filterPanelConstants.BEZIER_END_Y;
+	            var RESONANCE_OFFSET = _all.filterPanelConstants.RESONANCE_OFFSET;
+	            var RESONANCE_SCALE = _all.filterPanelConstants.RESONANCE_SCALE;
+
+	            var y = HEIGHT / 2;
+	            var resonanceStart = (res + RESONANCE_OFFSET) / RESONANCE_SCALE;
 	            ctx.beginPath();
 	            ctx.moveTo(0, y);
-	            ctx.bezierCurveTo(250, y, 300, y - resonanceStart, 300, 200);
+	            ctx.bezierCurveTo(BEZIER_CONTROL_X_ONE, y, BEZIER_CONTROL_X_TWO, y - resonanceStart, BEZIER_END_X, BEZIER_END_Y);
 	            ctx.stroke();
-	        };
-
-	        _this.state = {
-	            height: 150
-	        };
-	        return _this;
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    _createClass(FilterPanel, [{
@@ -35784,15 +35910,15 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            var context = _reactDom2.default.findDOMNode(this).getContext('2d');
 	            context.clearRect(0, 0, 600, 300);
-	            context.translate((nextProps.frequency - this.props.frequency) * 2.5, 0);
+	            context.translate((nextProps.frequency - this.props.frequency) * _all.filterPanelConstants.FREQUENCY_SCALE, 0);
 	            this._paintCurve(context, nextProps.resonance);
 	        }
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var context = _reactDom2.default.findDOMNode(this).getContext('2d');
-	            context.translate(-250 + this.props.frequency * 2.5, 0);
-	            context.strokeStyle = "#FF0000";
+	            context.translate(_all.filterPanelConstants.FREQUENCY_OFFSET + this.props.frequency * _all.filterPanelConstants.FREQUENCY_SCALE, 0);
+	            context.strokeStyle = '#FF0000';
 	            this._paintCurve(context, this.props.resonance);
 	        }
 	    }, {
@@ -35808,7 +35934,7 @@
 	                backgroundSize: 'cover'
 	            };
 
-	            return _react2.default.createElement('canvas', { style: surfaceStyle, width: 300, height: this.state.height, __self: this
+	            return _react2.default.createElement('canvas', { style: surfaceStyle, width: _all.filterPanelConstants.WIDTH, height: _all.filterPanelConstants.HEIGHT, __self: this
 	            });
 	        }
 	    }]);
@@ -35843,6 +35969,8 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _all = __webpack_require__(194);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35869,7 +35997,7 @@
 	                height: 17,
 	                width: 80,
 	                position: 'absolute',
-	                bottom: 1.29 * this.props.currentValue
+	                bottom: _all.controlConstants.VOLUME_FADER_SCALE * this.props.currentValue
 	            };
 	            var faderWrapperStyle = {
 	                position: 'absolute',
@@ -36004,32 +36132,251 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(39);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _Note = __webpack_require__(542);
+
+	var _Note2 = _interopRequireDefault(_Note);
+
+	var _all = __webpack_require__(194);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Keyboard = function (_Component) {
+	    _inherits(Keyboard, _Component);
+
+	    function Keyboard() {
+	        _classCallCheck(this, Keyboard);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Keyboard).call(this));
+
+	        _this._registerMouseMoveListener = function (func) {
+	            _this.setState({
+	                currentListener: func
+	            }, function () {
+	                document.addEventListener('mousemove', func);
+	            });
+	        };
+
+	        _this._playNote = function (i) {
+	            if (!_this.state.activeNote) {
+	                _this.setState({
+	                    activeNote: i
+	                }, function () {
+	                    _this.state.oscillators[i].connect(_this.state.gainNode);
+	                });
+	            }
+	        };
+
+	        _this._silenceActiveNote = function () {
+	            _this.state.activeNote && Promise.resolve(_this.state.oscillators[_this.state.activeNote].disconnect(_this.state.gainNode)).then(function () {
+	                _this.setState({
+	                    activeNote: false
+	                });
+	            });
+	        };
+
+	        _this._createWave = function () {
+	            var real = new Float32Array(2);
+	            var imag = new Float32Array(2);
+	            real[0] = 0;
+	            imag[0] = 0;
+	            real[1] = 1;
+	            imag[1] = 0;
+	            var wave = _this.state.audioContext.createPeriodicWave(real, imag, { disableNormalization: true });
+	            _this.setState({
+	                wave: wave
+	            });
+	        };
+
+	        _this._playNoteFromKeys = function (e) {
+	            var idx = _all.keyMap.indexOf(e.which);
+	            if (idx > -1) {
+	                _this._playNote(idx);
+	            }
+	        };
+
+	        _this.state = {
+	            activeNote: false,
+	            audioContext: false,
+	            gainNode: false,
+	            wave: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Keyboard, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+
+	            this.setState({
+	                audioContext: new AudioContext()
+	            }, function () {
+	                Promise.resolve(_this2.setState({
+	                    gainNode: _this2.state.audioContext.createGain()
+	                })).then(function () {
+	                    _this2.state.gainNode.connect(_this2.state.audioContext.destination);
+	                }).then(function () {
+	                    _this2._createWave();
+	                }).then(function () {
+	                    _this2.setState({
+	                        oscillators: _all.Notes.map(function (note) {
+	                            var osc = _this2.state.audioContext.createOscillator();
+	                            osc.setPeriodicWave(_this2.state.wave);
+	                            osc.frequency.value = note.freq, osc.start();
+	                            return osc;
+	                        })
+	                    });
+	                });
+	            });
+	            document.addEventListener('mouseup', this._silenceActiveNote);
+	            document.addEventListener('keydown', this._playNoteFromKeys);
+	            document.addEventListener('keyup', this._silenceActiveNote);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this3 = this;
+
+	            var whiteNoteCount = 0;
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'keyboard', __self: this
+	                },
+	                _all.Notes.map(function (note, i) {
+	                    if (note.cMaj) {
+	                        whiteNoteCount++;
+	                    };
+	                    return _react2.default.createElement(_Note2.default, { data: note, key: i, noteIndex: i, index: whiteNoteCount, playNote: _this3._playNote, __self: _this3
+	                    });
+	                })
+	            );
+	        }
+	    }]);
+
+	    return Keyboard;
+	}(_react.Component);
+
+	exports.default = Keyboard;
+
+/***/ },
+/* 542 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(39);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Note = function (_Component) {
+	    _inherits(Note, _Component);
+
+	    function Note() {
+	        _classCallCheck(this, Note);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Note).call(this));
+
+	        _this._playNote = function () {
+	            _this.props.playNote(_this.props.noteIndex);
+	        };
+
+	        _this.state = {
+	            osc: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Note, [{
+	        key: 'render',
+
+
+	        // pass in audiocontext and waveform as props
+
+	        value: function render() {
+	            return _react2.default.createElement('div', { onMouseDown: this._playNote, className: this.props.data.cMaj ? 'whiteNote' : 'blackNote', style: { left: this.props.index * 64 - 20 }, __self: this
+	            });
+	        }
+	    }]);
+
+	    return Note;
+	}(_react.Component);
+
+	Note.propTypes = {
+	    data: _react.PropTypes.object.isRequired,
+	    index: _react.PropTypes.number.isRequired,
+	    noteIndex: _react.PropTypes.number.isRequired,
+	    playNote: _react.PropTypes.func.isRequired
+	};
+	;
+
+	exports.default = Note;
+
+/***/ },
+/* 543 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.loadPatches = loadPatches;
 	exports.addNewPatch = addNewPatch;
 	exports.editPatch = editPatch;
 
-	var _ActionTypes = __webpack_require__(194);
-
-	var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _all = __webpack_require__(194);
 
 	function loadPatches() {
 	    return {
-	        type: _ActionTypes2.default.LOAD_PATCHES
+	        type: _all.ActionTypes.LOAD_PATCHES
 	    };
 	}
 
 	function addNewPatch(data) {
 	    return {
-	        type: _ActionTypes2.default.ADD_NEW_PATCH,
+	        type: _all.ActionTypes.ADD_NEW_PATCH,
 	        payload: data
 	    };
 	}
 
 	function editPatch(data, i) {
 	    return {
-	        type: _ActionTypes2.default.EDIT_PATCH,
+	        type: _all.ActionTypes.EDIT_PATCH,
 	        payload: {
 	            data: data,
 	            index: i
