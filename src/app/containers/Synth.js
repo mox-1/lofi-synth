@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 import SynthPanel from '../components/SynthPanel';
 import * as PatchActions from '../actions/PatchActions';
 
-import {userPrompts} from '../constants/all';
+import {UserPrompts} from '../constants/all';
 
 // dont give this component a state. let all data come from redux
 
@@ -46,7 +46,7 @@ class Synth extends Component {
         // redux action to update active id of redux state with params
         // send data to backend
         let showSuccessMessage = () => {
-            window.alert(userPrompts.SUCCESS);
+            window.alert(UserPrompts.SUCCESS);
         };
         if (this.state.tempPatch) {
             Promise.resolve(this.props.patchActions.addNewPatch(data)).then(() => {
@@ -56,7 +56,7 @@ class Synth extends Component {
                 }, showSuccessMessage);
             });
         } else {
-            let x = window.confirm(userPrompts.CONFIRM);
+            let x = window.confirm(UserPrompts.CONFIRM);
             if (x) {
                 Promise.resolve(this.props.patchActions.editPatch(data, this.state.activePatch)).then(showSuccessMessage);
             }
@@ -64,21 +64,25 @@ class Synth extends Component {
     }
 
     _newPatch = () => {
-        Promise.resolve(window.prompt(userPrompts.PROMPT)).then((title) => {
-            this.setState({
-                tempPatch: {
-                    title: title,
-                    params: {
-                        osc: 1,
-                        attack: 50,
-                        sustain: 50,
-                        delay: 50,
-                        release: 50,
-                        frequency: 50,
-                        resonance: 50
+        Promise.resolve(window.prompt(UserPrompts.PROMPT)).then((title) => {
+            if(title.length === 0 || title.length > 10) {
+                alert(UserPrompts.FAIL);
+            } else {
+                this.setState({
+                    tempPatch: {
+                        title: title,
+                        params: {
+                            osc: 1,
+                            attack: 50,
+                            sustain: 50,
+                            delay: 50,
+                            release: 50,
+                            frequency: 50,
+                            resonance: 50
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     }
 

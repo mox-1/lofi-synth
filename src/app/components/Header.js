@@ -1,21 +1,17 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
-class Header extends Component {
-    render() {
-        return (
-            <div className={'header'}>
-                <div className={'patch-selector'} >
-                    <div onClick={this.props.incrementActivePatch}>+</div>
-                    <div onClick={this.props.decrementActivePatch}>-</div>
-                </div>
-                <div className={'screen'}>{this.props.title}</div>
-                <div onClick={this.props.newPatch}>NEW</div>
-                <div onClick={this.props.savePatch}>SAVE</div>
+const Header = ({incrementActivePatch, decrementActivePatch, title, newPatch, savePatch}) =>
+    <div className={'header'}>
+        <div className={'screen'}>{title}
+            <div className={'patch-selector'} >
+                <div onClick={incrementActivePatch} className={'arrow-up'}></div>
+                <div onClick={decrementActivePatch} className={'arrow-down'}></div>
             </div>
-        );
-    }
-}
+            <div onClick={savePatch} className={'save-patch'}></div>
+            <div onClick={newPatch} className={'add-patch'}>+</div>
+        </div>
+    </div>;
 
 Header.propTypes = {
     title: PropTypes.string.isRequired,

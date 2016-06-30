@@ -2,90 +2,69 @@ import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 import Note from './Note';
 import {Notes, keyMap} from '../constants/all';
+import Voice from '../utils/Voice';
 
 class Keyboard extends Component {
 
     constructor() {
         super();
         this.state = {
-            activeNote: false,
+            oscillators: false,
             audioContext: false,
             gainNode: false,
-            wave: false
+            filter: false,
+            activeNotes: []
         };
+        this.activeNotes = {};
     }
 
-    _registerMouseMoveListener = (func) => {
-        this.setState({
-            currentListener: func
-        }, () => {
-            document.addEventListener('mousemove', func);
-        });
-    }
-
-    _playNote = (i) => {
-        if(!this.state.activeNote) {
+    _setActiveNote = (i) => {
+        if((Object.keys(this.activeNotes).indexOf(i.toString()) === -1)) {
+            var osc = new Voice(this.state.audioContext, this.state.audioContext.destination, Notes[i].freq, {...this.props});
+            osc.start();
+            this.activeNotes[i] = osc;
             this.setState({
-                activeNote: i
-            }, () => {
-                this.state.oscillators[i].connect(this.state.gainNode);
+                activeNotes: [...this.state.activeNotes, i]
             });
         }
     }
 
-    _silenceActiveNote = () => {
-        this.state.activeNote && Promise.resolve(this.state.oscillators[this.state.activeNote].disconnect(this.state.gainNode)).then(() => {
-            this.setState({
-                activeNote: false
-            });
+    _stopAllActiveNotes = () => {
+        Object.keys(this.activeNotes).forEach((noteKey) => {
+            this.activeNotes[noteKey].stop();
+        });
+        this.activeNotes = {};
+        this.setState({
+            activeNotes: []
         });
     }
 
-    _createWave = () => {
-        var real = new Float32Array(2);
-        var imag = new Float32Array(2);
-        real[0] = 0;
-        imag[0] = 0;
-        real[1] = 1;
-        imag[1] = 0;
-        var wave = this.state.audioContext.createPeriodicWave(real, imag, {disableNormalization: true});
-        this.setState({
-            wave: wave
-        });
+    _stopActiveNote = (e) => {
+        let idx = keyMap.indexOf(e.which);
+        if(idx > -1) {
+            Promise.resolve(this.activeNotes[idx].stop()).then(() => {
+                delete this.activeNotes[idx];
+            });
+            this.setState({
+                activeNotes: this.state.activeNotes.filter((note) => (note !== idx))
+            });
+        }
     }
 
     _playNoteFromKeys = (e) => {
         let idx = keyMap.indexOf(e.which);
         if(idx > -1) {
-            this._playNote(idx);
+            this._setActiveNote(idx);
         }
     }
 
     componentWillMount() {
         this.setState({
             audioContext: new AudioContext()
-        }, () => {
-            Promise.resolve(this.setState({
-                gainNode: this.state.audioContext.createGain()
-            })).then(() => {
-                this.state.gainNode.connect(this.state.audioContext.destination);
-            }).then(() => {
-                this._createWave();
-            }).then(() => {
-                this.setState({
-                    oscillators: Notes.map(note => {
-                        var osc = this.state.audioContext.createOscillator();
-                        osc.setPeriodicWave(this.state.wave);
-                        osc.frequency.value = note.freq,
-                        osc.start();
-                        return osc;
-                    })
-                });
-            });
         });
-        document.addEventListener('mouseup', this._silenceActiveNote);
+        document.addEventListener('mouseup', this._stopAllActiveNotes);
         document.addEventListener('keydown', this._playNoteFromKeys);
-        document.addEventListener('keyup', this._silenceActiveNote);
+        document.addEventListener('keyup', this._stopActiveNote);
     }
 
     render() {
@@ -95,10 +74,21 @@ class Keyboard extends Component {
                 if(note.cMaj) {
                     whiteNoteCount++;
                 };
-                return (<Note data={note} key={i} noteIndex={i} index={whiteNoteCount} playNote={this._playNote}/>);
+                return (<Note data={note} key={i} noteIndex={i} playing={!!~this.state.activeNotes.indexOf(i)} index={whiteNoteCount} playNote={this._setActiveNote}/>);
             })}
         </div>);
     }
 }
+
+Keyboard.propTypes = {
+    oscType: PropTypes.string.isRequired,
+    attack: PropTypes.number.isRequired,
+    delay: PropTypes.number.isRequired,
+    sustain: PropTypes.number.isRequired,
+    release: PropTypes.number.isRequired,
+    frequency: PropTypes.number.isRequired,
+    resonance: PropTypes.number.isRequired,
+    volume: PropTypes.number.isRequired
+};
 
 export default Keyboard;

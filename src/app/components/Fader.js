@@ -1,33 +1,18 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 
-class Fader extends React.Component {
+const Fader = ({currentValue, handleMouseDown}) => {
+    let faderStyle = {
+        bottom: currentValue
+    };
 
-    render() {
-        let faderStyle = {
-            backgroundImage: 'url(\'images/fader.png\')',
-            backgroundSize: 'contain',
-            height: 50,
-            width: 23,
-            position: 'absolute',
-            bottom: this.props.currentValue
-        };
-        let faderWrapperStyle = {
-            position: 'absolute',
-            left: this.props.left,
-            top: this.props.top,
-            height: 150,
-            width: 23,
-            margin: 10
-        };
-        return (
-            <div style={faderWrapperStyle}>
-                <div className={'faderSlit'}></div>
-                <div style={faderStyle} onMouseDown={this.props.handleMouseDown}></div>
-            </div>
-        );
-    }
-}
+    return (
+        <div className={'fader-wrapper'}>
+            <div className={'faderSlit'}></div>
+            <div className={'fader-style'} style={faderStyle} onMouseDown={handleMouseDown}></div>
+        </div>
+    );
+};
 
 Fader.propTypes = {
     currentValue: PropTypes.number.isRequired,

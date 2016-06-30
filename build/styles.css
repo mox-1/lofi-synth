@@ -1,9 +1,46 @@
+.osc-section {
+    position: relative;
+    top: 45px;
+    left: 15px;
+    height: 185px;
+    width: 150px;
+    border-bottom-left-radius: 37px;
+    border-bottom-right-radius: 13px;
+    border-bottom: 2px solid #dedcda;
+}
+
+.section-label {
+    padding: 8px;
+    background-color: #2e2f31;
+    position: absolute;
+    font-size: 20px;
+    color: #dedcda;
+}
+
+.osc-section .section-label {
+    bottom: -21px;
+    left: 33%;
+}
+
 .knob {
     position: absolute;
     height: 80px;
     width: 80px;
     background-size: cover;
     background-image: url("images/to_rotate.png");
+    transition: transform 0.3s linear;
+}
+
+.active .knob {
+    transition: none;
+}
+
+.active .fader-style {
+    transition: none;
+}
+
+.discrete-dial-wrapper .dial-wrapper .knob {
+    transition: transform 0.3s linear;
 }
 
 .knob-lighting {
@@ -20,6 +57,22 @@
     width: 100px;
     background-size: cover;
     background-image: url("images/knob_just_tick.png");
+}
+
+.attack {
+    left: 0px;
+}
+
+.decay {
+    left: 50px;
+}
+
+.sustain {
+    left: 100px;
+}
+
+.release {
+    left: 150px;
 }
 
 .faderSlit {
@@ -39,28 +92,111 @@
     position: relative;
     margin: 0px auto;
     width: 960px;
-    height: 300px;
+    height: 274px;
 }
 
 .main-panel {
     position: absolute;
     width: 960px;
-    height: 300px;
+    height: 273px;
     top: 0;
+    background-color: #2e2f31;
 }
 
 .asdr {
     position: absolute;
-    top: 21px;
-    left: 145px;
+    top: 30px;
+    left: 176px;
+    height: 200px;
+    width: 200px;
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+    border-bottom: 2px solid #dedcda;
+}
+
+.asdr .section-label {
+    bottom: -20px;
+    left: 38%;
+}
+
+.filter-section {
+    position: absolute;
+    width: 420px;
+    height: 216px;
+    top: 14px;
+    left: 409px;
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 37px;
+    border-bottom: 2px solid #dedcda;
+}
+
+.filter-section .section-label {
+    bottom: -20px;
+    left: 32%;
+}
+
+.volume-wrapper {
+    position: absolute;
+    height: 150px;
+    width: 78px;
+    margin: 10px;
+}
+
+.volume-section {
+    position: absolute;
+    height: 200px;
+    right: 13px;
+    width: 100px;
+    top: 30px;
+    border-bottom-left-radius: 37px;
+    border-bottom-right-radius: 37px;
+    border-bottom: 2px solid #dedcda;
+}
+
+.volume-section .section-label {
+    bottom: -20px;
+    left: 21%;
+}
+
+.fader-style {
+    background-image: url('images/fader.png');
+    background-size: contain;
+    height: 50px;
+    width: 23px;
+    position: absolute;
+    transition: bottom 0.3s ease;
+}
+
+.fader-wrapper {
+    position: absolute;
+    height: 150px;
+    width: 23px;
+    margin: 10px;
 }
 
 .header {
     width: 960px;
     height: 100px;
-    background-color: #a4a3a2;
+    position: relative;
+    background-color: #dedcda;
+    border-image: url('images/wooden.png');
+
     margin: 0px auto;
     border-bottom: 4px solid #d8d8d8;
+    border-top-right-radius: 60px;
+    border-top-left-radius: 60px;
+    border: 3px solid #666;
+    box-sizing: border-box;
+}
+
+.canvas-style {
+    position: absolute;
+    border: 8px solid #6b6363;
+    border-style: double;
+    top: 25px;
+    left: 5px;
+    background-image: url('images/graph_background.png');
+    background-size: cover;
 }
 
 .discrete-dial-wrapper {
@@ -70,6 +206,12 @@
     background-color: #2e2f31;
     left: 25px;
     top: 25px;
+}
+
+.discrete-dial-wrapper .dial-wrapper {
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 .osc-type {
@@ -103,19 +245,15 @@
     bottom: 0px;
 }
 
-.patch-selector {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-}
-
 .keyboard {
     width: 960px;
     margin: 0px auto;
     position: relative;
+    transform: skewX(2deg);
+    left: 7px;
 }
 
-.whiteNote {
+.white-note {
     width: 64px;
     height: 300px;
     display: inline-block;
@@ -125,7 +263,13 @@
     box-sizing: border-box;
 }
 
-.blackNote {
+.white-note.pressed {
+    box-shadow: 2px 2px 5px #888888;
+    border-right-width: 3px;
+    border-left-width: 3px;
+}
+
+.black-note {
     background-color: black;
     height: 250px;
     vertical-align: top;
@@ -137,9 +281,14 @@
     border-radius: 0px 4px 7px;
 }
 
+.black-note.pressed {
+    width: 39px;
+    box-shadow: 2px 2px 5px #888888;
+}
+
 
 .screen {
-    width: 453px;
+    width: 565px;
     height: 69px;
     margin: 20px;
     background-color: #eaeaea;
@@ -154,6 +303,51 @@
     box-sizing: border-box;
     font-family: 'digital';
     color: #666;
+}
+
+.patch-selector {
+    position: absolute;
+    top: 25%;
+    left: 2%;
+    width: 50px;
+    height: 50px;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #6a6666;
+    margin-bottom: 10px;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #6a6666;
+}
+
+.save-patch {
+    height: 22px;
+    width: 22px;
+    top: 6px;
+    right: 8px;
+    position: absolute;
+    background-image: url('images/save-image.png');
+    background-size: contain;
+    cursor: pointer;
+}
+
+.add-patch {
+    position: absolute;
+    top: 31px;
+    right: 8px;
+    line-height: 29px;
+    font-size: 52px;
+    cursor: pointer;
 }
 
 @font-face {

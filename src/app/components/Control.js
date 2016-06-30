@@ -47,8 +47,8 @@ const Control = (WrappedComponent) =>
         }
 
         _scaleParam = (param) => {
-            if (param < 0) {
-                return 0;
+            if (param < 1) {
+                return 1;
             } else if (param > 100) {
                 return 100;
             } else {

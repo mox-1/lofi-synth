@@ -9,7 +9,7 @@ export default function patchReducer(state = initialState, action) {
                 {
                     title: 'Classic Piano',
                     params: {
-                        osc: 1,
+                        oscType: 'sawtooth',
                         attack: 10,
                         sustain: 0,
                         delay: 50,
@@ -21,13 +21,37 @@ export default function patchReducer(state = initialState, action) {
                 {
                     title: 'FM synth',
                     params: {
-                        osc: 2,
+                        oscType: 'sine',
                         attack: 90,
                         sustain: 4,
                         delay: 76,
                         release: 45,
                         frequency: 70,
                         resonance: 3
+                    }
+                },
+                {
+                    title: 'Distort',
+                    params: {
+                        oscType: 'square',
+                        attack: 1,
+                        sustain: 3,
+                        delay: 21,
+                        release: 60,
+                        frequency: 31,
+                        resonance: 56
+                    }
+                },
+                {
+                    title: 'Chill',
+                    params: {
+                        oscType: 'sine',
+                        attack: 44,
+                        sustain: 1,
+                        delay: 56,
+                        release: 50,
+                        frequency: 100,
+                        resonance: 1
                     }
                 }
             ];

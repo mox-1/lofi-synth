@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import {filterPanelConstants} from '../constants/all';
+import {FilterPanelConstants} from '../constants/all';
 
 class FilterPanel extends React.Component {
 
@@ -13,7 +13,7 @@ class FilterPanel extends React.Component {
             BEZIER_END_Y,
             RESONANCE_OFFSET,
             RESONANCE_SCALE
-        } = filterPanelConstants;
+        } = FilterPanelConstants;
         let y = HEIGHT / 2;
         let resonanceStart = (res + RESONANCE_OFFSET) / RESONANCE_SCALE;
         ctx.beginPath();
@@ -32,30 +32,20 @@ class FilterPanel extends React.Component {
     componentWillReceiveProps(nextProps) {
         var context = ReactDOM.findDOMNode(this).getContext('2d');
         context.clearRect(0, 0, 600, 300);
-        context.translate((nextProps.frequency - this.props.frequency) * filterPanelConstants.FREQUENCY_SCALE, 0);
+        context.translate((nextProps.frequency - this.props.frequency) * FilterPanelConstants.FREQUENCY_SCALE, 0);
         this._paintCurve(context, nextProps.resonance);
     }
 
     componentDidMount() {
         var context = ReactDOM.findDOMNode(this).getContext('2d');
-        context.translate(filterPanelConstants.FREQUENCY_OFFSET + this.props.frequency * filterPanelConstants.FREQUENCY_SCALE, 0);
+        context.translate(FilterPanelConstants.FREQUENCY_OFFSET + this.props.frequency * FilterPanelConstants.FREQUENCY_SCALE, 0);
         context.strokeStyle = '#FF0000';
         this._paintCurve(context, this.props.resonance);
     }
 
     render() {
-        let surfaceStyle = {
-            position: 'absolute',
-            border: '8px solid #6b6363',
-            borderStyle: 'double',
-            top: 25,
-            left: '35%',
-            backgroundImage: 'url(\'images/graph_background.png\')',
-            backgroundSize: 'cover'
-        };
-
         return (
-            <canvas style={surfaceStyle} width={filterPanelConstants.WIDTH} height={filterPanelConstants.HEIGHT}></canvas>
+            <canvas className={'canvas-style'} width={FilterPanelConstants.WIDTH} height={FilterPanelConstants.HEIGHT}></canvas>
         );
     }
 }

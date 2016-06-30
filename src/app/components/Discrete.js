@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
-import {controlConstants} from '../constants/all';
+import {ControlConstants} from '../constants/all';
 
 const Discrete = (WrappedComponent) =>
     class extends Component {
@@ -8,9 +8,9 @@ const Discrete = (WrappedComponent) =>
             currentValue: PropTypes.number.isRequired
         }
         _discretise = (num) => {
-            let steps = controlConstants.NUM_OF_OSC_TYPES - 1;
+            let steps = ControlConstants.NUM_OF_OSC_TYPES - 1;
             let stepValue = 100 / steps;
-            var value = 0;
+            var value = 1;
             for (var i = 0; i < steps; i++) {
                 if (num <= value) {
                     return value;
@@ -20,18 +20,13 @@ const Discrete = (WrappedComponent) =>
             return 100;
         }
         render() {
-            let style = {
-                transition: 'transform 0.2s ease',
-                top: '10px',
-                left: '10px'
-            };
             return (
                 <div className={'discrete-dial-wrapper'}>
                     <div className={'osc-type sine'}></div>
                     <div className={'osc-type square'}></div>
                     <div className={'osc-type triangle'}></div>
                     <div className={'osc-type saw'}></div>
-                    <WrappedComponent extraStyles={style} {...this.props} currentValue={this._discretise(this.props.currentValue)}/>
+                    <WrappedComponent {...this.props} currentValue={this._discretise(this.props.currentValue)}/>
                 </div>
             );
         }

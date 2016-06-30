@@ -4,14 +4,14 @@ export const ActionTypes =  {
     EDIT_PATCH: 'EDIT_PATCH'
 };
 
-export const controlConstants = {
+export const ControlConstants = {
     DIAL_MINIMUM: -130,
     DIAL_SCALE_PARAM: 2.6,
     NUM_OF_OSC_TYPES: 4,
     VOLUME_FADER_SCALE: 1.29
 };
 
-export const filterPanelConstants = {
+export const FilterPanelConstants = {
     HEIGHT: 150,
     WIDTH: 300,
     BEZIER_CONTROL_X_ONE: 250,
@@ -24,10 +24,11 @@ export const filterPanelConstants = {
     FREQUENCY_SCALE: 2.5
 };
 
-export const userPrompts = {
+export const UserPrompts = {
     SUCCESS: 'Patch saved :)',
     CONFIRM: 'Overwrite patch?',
-    PROMPT: 'Enter a name for your patch'
+    PROMPT: 'Enter a name for your patch',
+    FAIL: 'Invalid name (must be be more than 0 and no more than 10 characters in length)'
 };
 
 export const Notes = [
