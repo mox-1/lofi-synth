@@ -16,7 +16,6 @@ class App extends React.Component {
                 <Provider store={store}>
                     <div>
                         <Synth/>
-                        <DevTools/>
                     </div>
                 </Provider>
             </div>
